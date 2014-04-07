@@ -7,8 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "GWNumNode.h"
 
-@interface GWCoreCalculator : NSObject
+@interface GWCoreCalculator : NSObject{
+    GWNumNode * root;
+}
 
 - (int) Calc:(NSString *)operation;
 - (NSArray*)ParseOperation:(NSString*)operation;

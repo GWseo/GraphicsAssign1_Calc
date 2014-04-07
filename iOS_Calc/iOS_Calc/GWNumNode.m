@@ -50,6 +50,7 @@
         case '/':
             op = Div;
             break;
+        
         default:
             NSLog(@"Wrong Operation\n");
             break;
@@ -67,24 +68,29 @@
     if ( ty == Node){
         switch (op){
             case Add:
-                
+                result = [self addOperation];
                 break;
             
             case Sub:
+                result = [self subOperation];
                 break;
         
             case Div:
+                result = [self divOperation];
                 break;
             
             case Mul:
+                result = [self mulOperation];
                 break;
-            
+            case None:
+                NSLog(@"ERROR! OPERATION IS NOT SET!!!\n");
+                break;
             default:
                 break;
         }
     }
     else{
-        result = rValue;
+        result = lValue;
     }
     
     return result;

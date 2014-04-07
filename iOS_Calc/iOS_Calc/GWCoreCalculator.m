@@ -7,7 +7,7 @@
 //
 
 #import "GWCoreCalculator.h"
-#import "GWNumNode.h"
+
 @interface GWCoreCalculator()
 @property (nonatomic, strong)NSMutableArray *parseOperations;
 @end
@@ -15,23 +15,24 @@
 @synthesize parseOperations = _parseOperations;
 
 - (NSMutableArray*) parseOperations{
-    if(!_parseOperations)_parseOperations = [[NSMutableArray alloc] init];
+    if(!_parseOperations){
+        _parseOperations = [[NSMutableArray alloc] init];
+        NSLog(@"parse operation array create\n!");
+    }
     return _parseOperations;
 }
-
 
 - (int) Calc:(NSString *)operation
 {
     int result=0;
+    root=nil;
     NSLog(@"operation\n");
     [self ParseOperation:operation];
     //check bracket
     
-    //push operation stack
-    
-    //mul and div operation
-    
-    //add and sub operation
+    //make tree
+    [self makeTree];
+    //perform calculate
     
     
     return result;
@@ -44,14 +45,14 @@
     while (index<[operation length]) {
         switch ([operation characterAtIndex:index]){
                 case '(':
-                [self pushNumber:integerValue];
-                integerValue = 0;
+                //[self pushNumber:integerValue];
+                //integerValue = 0;
                 [self pushOperation:@"("];
                 break;
                 
                 case ')':
-                [self pushNumber:integerValue];
-                integerValue = 0;
+                //[self pushNumber:integerValue];
+                //integerValue = 0;
                 [self pushOperation:@")"];
                 break;
                 
@@ -106,17 +107,42 @@
         }
         index++;
     }
+    NSLog(@"parsed operations count : %d",[[self parseOperations] count]);
     return _parseOperations;
+}
+
+
+- (void)makeTree{
+    GWNumNode *node=nil;
+    GWNumNode *parent = nil;
+    int index = 0;
+    NSLog(@"make tree, %d\n",[_parseOperations count]);
+    while (index != [_parseOperations count] ){
+        if([_parseOperations[index] isKindOfClass:[NSNumber class ]]){
+            NSNumber* num = [_parseOperations objectAtIndex:index];
+            NSLog(@"this is number : %d\n",[num intValue]);
+            
+            
+        }
+        else{
+            NSString* op = [_parseOperations objectAtIndex:index];
+            NSLog(@"is this not : %@\n",op);
+            
+            
+        }
+        index++;
+    }
+    
 }
 - (void)pushNumber:(int)integerValue{
     NSNumber* num = [NSNumber numberWithInt:integerValue];
-    [_parseOperations addObject:num];
+    [[self parseOperations] addObject:num];
     NSLog(@"push num : %d\n",integerValue);
 }
 
 - (void)pushOperation:(NSString*)operator{
-    NSCharacterSet* oper = [NSCharacterSet characterSetWithCharactersInString:operator ];
-    [_parseOperations addObject:oper];
+    NSString* oper = [NSString stringWithString:operator ];
+    [[self parseOperations] addObject:oper];
     NSLog(@"push oper : %@\n",operator);
 }
 @end
