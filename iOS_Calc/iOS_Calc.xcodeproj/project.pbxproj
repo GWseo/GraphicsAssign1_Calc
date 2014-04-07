@@ -21,6 +21,7 @@
 		A43FB7F418F2A07B007EE96C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A43FB7D618F2A07B007EE96C /* UIKit.framework */; };
 		A43FB7FC18F2A07B007EE96C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A43FB7FA18F2A07B007EE96C /* InfoPlist.strings */; };
 		A43FB7FE18F2A07B007EE96C /* iOS_CalcTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A43FB7FD18F2A07B007EE96C /* iOS_CalcTests.m */; };
+		A43FB80918F2A7FD007EE96C /* GWCoreCalculator.m in Sources */ = {isa = PBXBuildFile; fileRef = A43FB80818F2A7FD007EE96C /* GWCoreCalculator.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,8 @@
 		A43FB7F918F2A07B007EE96C /* iOS_CalcTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "iOS_CalcTests-Info.plist"; sourceTree = "<group>"; };
 		A43FB7FB18F2A07B007EE96C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A43FB7FD18F2A07B007EE96C /* iOS_CalcTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iOS_CalcTests.m; sourceTree = "<group>"; };
+		A43FB80718F2A7FD007EE96C /* GWCoreCalculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GWCoreCalculator.h; sourceTree = "<group>"; };
+		A43FB80818F2A7FD007EE96C /* GWCoreCalculator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GWCoreCalculator.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +118,8 @@
 				A43FB7E118F2A07B007EE96C /* GWAppDelegate.h */,
 				A43FB7E218F2A07B007EE96C /* GWAppDelegate.m */,
 				A43FB7E418F2A07B007EE96C /* Main.storyboard */,
+				A43FB80718F2A7FD007EE96C /* GWCoreCalculator.h */,
+				A43FB80818F2A7FD007EE96C /* GWCoreCalculator.m */,
 				A43FB7E718F2A07B007EE96C /* GWViewController.h */,
 				A43FB7E818F2A07B007EE96C /* GWViewController.m */,
 				A43FB7EA18F2A07B007EE96C /* Images.xcassets */,
@@ -252,6 +257,7 @@
 			files = (
 				A43FB7E318F2A07B007EE96C /* GWAppDelegate.m in Sources */,
 				A43FB7E918F2A07B007EE96C /* GWViewController.m in Sources */,
+				A43FB80918F2A7FD007EE96C /* GWCoreCalculator.m in Sources */,
 				A43FB7DF18F2A07B007EE96C /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
