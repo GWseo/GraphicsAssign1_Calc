@@ -24,6 +24,14 @@
     int result=0;
     NSLog(@"operation\n");
     [self ParseOperation:operation];
+    //check bracket
+    
+    //push operation stack
+    
+    //mul and div operation
+    
+    //add and sub operation
+    
     
     return result;
 }
@@ -39,41 +47,44 @@
                 integerValue = 0;
                 [self pushOperation:@"("];
                 break;
+                
                 case ')':
                 [self pushNumber:integerValue];
                 integerValue = 0;
                 [self pushOperation:@")"];
                 break;
+                
                 case '*':
                 [self pushNumber:integerValue];
                 integerValue = 0;
-                
                 [self pushOperation:@"*"];
                 break;
+                
                 case '/':
                 [self pushNumber:integerValue];
                 integerValue = 0;
                 [self pushOperation:@"/"];
                 break;
+                
                 case '+':
                 [self pushNumber:integerValue];
                 integerValue = 0;
                 [self pushOperation:@"+"];
-                
                 break;
+                
                 case '-':
                 [self pushNumber:integerValue];
                 integerValue = 0;
                 [self pushOperation:@"-"];
+                break;
                 
                 case ';':
                 [self pushNumber:integerValue];
                 integerValue = 0;
                 [self pushOperation:@"+"];
                 [self pushNumber:0];
-                
-                
                 break;
+                
                 case '1':
                 case '2':
                 case '3':
