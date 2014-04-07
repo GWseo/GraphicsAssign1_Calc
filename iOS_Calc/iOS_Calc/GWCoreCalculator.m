@@ -7,6 +7,7 @@
 //
 
 #import "GWCoreCalculator.h"
+#import "GWNumNode.h"
 @interface GWCoreCalculator()
 @property (nonatomic, strong)NSMutableArray *parseOperations;
 @end
