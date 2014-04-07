@@ -10,7 +10,7 @@
 
 
 
-typedef enum { None, Add, Sub, Mul, Div} OP;
+typedef enum { None, Add, Sub, Mul, Div, OpenBracket, CloseBracket} OP;
 typedef enum { Leaf, Node} TYPE;
 @interface GWNumNode : NSObject{
     GWNumNode * leftNode;
@@ -21,10 +21,13 @@ typedef enum { Leaf, Node} TYPE;
     int lValue;
     int rValue;
 }
--(id)initWithValue:(int)Value:(GWNumNode *)parent;
+-(id)initWithValue:(int)V:(GWNumNode *)parent;
 -(id)initWithPointer:(GWNumNode *)Child;
 -(void)setRValue:(int)Value;
 -(void)setRPointer:(GWNumNode *)Right;
+-(void)setLPointer:(GWNumNode *)Left;
 -(void)setOperator:(char)op;
 -(int)GetResult;
+-(BOOL)isChildFull;
+-(BOOL)isLeftEmpty;
 @end

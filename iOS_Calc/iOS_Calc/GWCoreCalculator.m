@@ -122,13 +122,37 @@
             NSNumber* num = [_parseOperations objectAtIndex:index];
             NSLog(@"this is number : %d\n",[num intValue]);
             
-            
+            if(!node){
+                parent = node;
+                
+                node = [[GWNumNode alloc]initWithValue:[num intValue] :node];
+                
+                if( [parent isLeftEmpty]){
+                    [parent setLPointer:node];
+                }else{
+                    [parent setRPointer:node];
+                    
+                }
+            }else{
+                node = [[GWNumNode alloc] initWithValue:[num intValue]: nil];
+            }
         }
         else{
             NSString* op = [_parseOperations objectAtIndex:index];
             NSLog(@"is this not : %@\n",op);
-            
-            
+            if ([op isEqualToString:@"("]) {
+                if( !node ){
+                    node = [[GWNumNode alloc]initWithValue:0 :nil];
+                    
+                }else{
+                    
+                }
+            }else if([op isEqualToString:@")"]){
+                
+            }
+            else{
+                [node setOperator:[op characterAtIndex:0]];
+            }
         }
         index++;
     }

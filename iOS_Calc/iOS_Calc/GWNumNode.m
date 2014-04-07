@@ -9,10 +9,10 @@
 #import "GWNumNode.h"
 @implementation GWNumNode
 
-- (id)initWithValue:(int)Value :(GWNumNode*)parent{
+- (id)initWithValue:(int)V :(GWNumNode*)parent{
     if ( self = [super init]){
         parentNode = parent;
-        lValue = Value;
+        lValue = V;
         ty = Leaf;
     }
     return self;
@@ -34,6 +34,11 @@
 - (void)setRPointer:(GWNumNode *)Right{
     rightNode = Right;
     
+    [self checkNil];
+}
+
+- (void)setLPointer:(GWNumNode *)Left{
+    leftNode = Left;
     [self checkNil];
 }
 - (void)setOperator:(char)oper{
@@ -101,6 +106,8 @@
         lValue = [leftNode GetResult];
         if (!rightNode){
             rValue = [rightNode GetResult];
+        }else{
+            rValue = 0;
         }
     }
     return lValue + rValue;
@@ -112,6 +119,8 @@
         lValue = [leftNode GetResult];
         if (!rightNode){
             rValue = [rightNode GetResult];
+        }else{
+            rValue = 0;
         }
     }
     result = lValue - rValue;
@@ -123,8 +132,11 @@
         lValue = [leftNode GetResult];
         if (!rightNode){
             rValue = [rightNode GetResult];
+        }else{
+            rValue = 1;
         }
     }
+    
     result = lValue * rValue;
     
     return result;
@@ -146,5 +158,14 @@
     }
     
     return result;
+}
+
+- (BOOL)isChildFull{
+    if (rightNode && leftNode) return YES;
+    else return NO;
+}
+- (BOOL)isLeftEmpty{
+    if (leftNode) return NO;
+    else return YES;
 }
 @end
