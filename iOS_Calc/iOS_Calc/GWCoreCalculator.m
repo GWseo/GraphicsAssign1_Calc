@@ -10,9 +10,11 @@
 
 @interface GWCoreCalculator()
 @property (nonatomic, strong)NSMutableArray *parseOperations;
+@property (nonatomic, strong)GWNumNode* root;
 @end
 @implementation GWCoreCalculator
 @synthesize parseOperations = _parseOperations;
+@synthesize root = _root;
 
 - (NSMutableArray*) parseOperations{
     if(!_parseOperations){
@@ -21,11 +23,14 @@
     }
     return _parseOperations;
 }
+- (GWNumNode *) root{
+    return _root;
+}
 
 - (int) Calc:(NSString *)operation
 {
     int result=0;
-    root=nil;
+    _root=nil;
     NSLog(@"operation\n");
     [self ParseOperation:operation];
     //check bracket
@@ -34,7 +39,9 @@
     [self makeTree];
     //perform calculate
     
+    result = [_root GetResult];
     
+    NSLog(@"result : %d, root : %@\n",result, _root);
     return result;
 }
 
@@ -51,37 +58,37 @@
                 break;
                 
                 case ')':
-                //[self pushNumber:integerValue];
-                //integerValue = 0;
+                if(integerValue)[self pushNumber:integerValue];
+                integerValue = 0;
                 [self pushOperation:@")"];
                 break;
                 
                 case '*':
-                [self pushNumber:integerValue];
+                if(integerValue)[self pushNumber:integerValue];
                 integerValue = 0;
                 [self pushOperation:@"*"];
                 break;
                 
                 case '/':
-                [self pushNumber:integerValue];
+                if(integerValue)[self pushNumber:integerValue];
                 integerValue = 0;
                 [self pushOperation:@"/"];
                 break;
                 
                 case '+':
-                [self pushNumber:integerValue];
+                if(integerValue)[self pushNumber:integerValue];
                 integerValue = 0;
                 [self pushOperation:@"+"];
                 break;
                 
                 case '-':
-                [self pushNumber:integerValue];
+                if(integerValue)[self pushNumber:integerValue];
                 integerValue = 0;
                 [self pushOperation:@"-"];
                 break;
                 
                 case ';':
-                [self pushNumber:integerValue];
+                if(integerValue)[self pushNumber:integerValue];
                 integerValue = 0;
                 [self pushOperation:@"+"];
                 [self pushNumber:0];
@@ -122,11 +129,14 @@
             NSNumber* num = [_parseOperations objectAtIndex:index];
             NSLog(@"this is number : %d\n",[num intValue]);
             
-            if(!node){
-                parent = node;
-                
-                node = [[GWNumNode alloc]initWithValue:[num intValue] :node];
-                
+            if(node){
+                //parent = node;
+                if([node isLeftEmpty] ){
+                    [node setLValue:[num intValue]];
+                }
+                else{
+                    node = [[GWNumNode alloc]initWithValue:[num intValue] :node];
+                }
                 if( [parent isLeftEmpty]){
                     [parent setLPointer:node];
                 }else{
@@ -134,7 +144,7 @@
                     
                 }
             }else{
-                node = [[GWNumNode alloc] initWithValue:[num intValue]: nil];
+                node = [[GWNumNode alloc] initWithValue:[num intValue]: parent];
             }
         }
         else{
@@ -142,12 +152,27 @@
             NSLog(@"is this not : %@\n",op);
             if ([op isEqualToString:@"("]) {
                 if( !node ){
-                    node = [[GWNumNode alloc]initWithValue:0 :nil];
+                    node = [[GWNumNode alloc]initWithValue:0 :node];
                     
                 }else{
-                    
+                    [node setBracket];
+                    parent = node;
+                    node = [[GWNumNode alloc]initWithValue:0 :parent];
+                    if ([parent isLeftEmpty]) [parent setLPointer:node];
+                    else [parent setRPointer:node];
                 }
             }else if([op isEqualToString:@")"]){
+                while (YES) {
+                    if([node checkBracket]) break;
+                    node =parent;
+                    parent = [node getParent];
+                }
+                if (!parent) {
+                    parent = [[GWNumNode alloc]initWithPointer:node];
+                }
+                node = parent;
+                parent = [node getParent];
+                    
                 
             }
             else{
@@ -156,7 +181,8 @@
         }
         index++;
     }
-    
+    _root = [self getRoot:node];
+    NSLog(@"root done?? %@",node);
 }
 - (void)pushNumber:(int)integerValue{
     NSNumber* num = [NSNumber numberWithInt:integerValue];
@@ -168,5 +194,17 @@
     NSString* oper = [NSString stringWithString:operator ];
     [[self parseOperations] addObject:oper];
     NSLog(@"push oper : %@\n",operator);
+}
+
+- (GWNumNode *)getRoot:(GWNumNode *)node{
+    GWNumNode *parent = [node getParent];
+    GWNumNode *root = node;
+    while (parent){
+        root= parent;
+        parent = [parent getParent];
+        NSLog(@"get root : %@",root);
+        
+    }
+    return root;
 }
 @end

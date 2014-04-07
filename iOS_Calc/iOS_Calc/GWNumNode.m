@@ -14,21 +14,30 @@
         parentNode = parent;
         lValue = V;
         ty = Leaf;
+        B = NO;
     }
+    
     return self;
 }
 
 - (id)initWithPointer:(GWNumNode *)Child{
     if ( self = [super init]){
-        leftNode = Child;
+        if(!leftNode)leftNode = Child;
+        else rightNode =Child;
         ty = Node;
         op = None;
+        B = NO;
     }
     return self;
 }
 - (void)setRValue:(int)Value{
     rValue = Value;
     
+    [self checkNil];
+}
+
+- (void)setLValue:(int)Value{
+    lValue = Value;
     [self checkNil];
 }
 - (void)setRPointer:(GWNumNode *)Right{
@@ -70,7 +79,7 @@
 
 - (int)GetResult{
     int result=0;
-    if ( ty == Node){
+    if ( ty != Node){
         switch (op){
             case Add:
                 result = [self addOperation];
@@ -97,57 +106,59 @@
     else{
         result = lValue;
     }
+    NSLog(@"Result : %d\n",result);
     
     return result;
 }
 
 - (int)addOperation{
-    if (!leftNode){
+    if (leftNode){
         lValue = [leftNode GetResult];
-        if (!rightNode){
-            rValue = [rightNode GetResult];
-        }else{
-            rValue = 0;
-        }
+    }
+    if (rightNode){
+        rValue = [rightNode GetResult];
+    }else{
+        rValue = 0;
     }
     return lValue + rValue;
 }
 
 - (int)subOperation{
     int result=0;
-    if (!leftNode){
+    if (leftNode){
         lValue = [leftNode GetResult];
-        if (!rightNode){
-            rValue = [rightNode GetResult];
-        }else{
-            rValue = 0;
-        }
+    }
+    if (rightNode){
+        rValue = [rightNode GetResult];
+    }else{
+        rValue = 0;
     }
     result = lValue - rValue;
     return result;
 }
 - (int)mulOperation{
     int result=0;
-    if(!leftNode){
+    if(leftNode){
         lValue = [leftNode GetResult];
-        if (!rightNode){
-            rValue = [rightNode GetResult];
-        }else{
-            rValue = 1;
-        }
+        
     }
-    
+    if (rightNode){
+        rValue = [rightNode GetResult];
+    }else{
+        rValue = 1;
+    }
     result = lValue * rValue;
     
     return result;
 }
 - (int)divOperation{
     int result=0;
-    if(!leftNode){
+    if(leftNode){
         lValue = [leftNode GetResult];
-        if (!rightNode){
-            rValue = [rightNode GetResult];
-        }
+        
+    }
+    if (rightNode){
+        rValue = [rightNode GetResult];
     }
     if(rValue != 0){
         result = lValue/rValue;
@@ -165,7 +176,19 @@
     else return NO;
 }
 - (BOOL)isLeftEmpty{
+    if (lValue!=0) return NO;
     if (leftNode) return NO;
     else return YES;
+}
+
+- (void)setBracket{
+    if(!B)B=YES;
+    else B=NO;
+}
+- (BOOL)checkBracket{
+    return B;
+}
+- (GWNumNode*)getParent{
+    return parentNode;
 }
 @end
