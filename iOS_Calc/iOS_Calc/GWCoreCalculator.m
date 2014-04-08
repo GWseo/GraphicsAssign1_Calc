@@ -218,16 +218,19 @@
                             parent = [node getParent];
                         }else{
                             //insert node
+                            /*
                             if (!parent) {
-                             //   node = temp;
-                             //   parent = [node getParent];
-                             //   break;
-                            }
-                            new = [[GWNumNode alloc]init];
-                            [new setLPointer:node];
-                            [new setParent:parent];
-                            [parent setRPointer:new];
-                            
+                                //node = temp;
+                                parent = [node getParent];
+                                
+                                break;
+                            //}else{
+                            */
+                             new = [[GWNumNode alloc]initWithPointer:node];
+                                [new setParent:parent];
+                                if([parent isLeftEmpty])[parent setLPointer:new];
+                                else [parent setRPointer:new];
+                            //}
                             node = new;
                             
                             break;
