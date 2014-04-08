@@ -155,6 +155,7 @@
             if ([op isEqualToString:@"("]) {
                 if( !node ){
                     node = [[GWNumNode alloc]initWithValue:0 :node];
+                    [node setBracket];
                     
                 }else{
                     [node setBracket];
@@ -174,10 +175,11 @@
                 }
                 node = parent;
                 parent = [node getParent];
-                    
+                
                 
             }
             else{
+                //operation priority
                 [node setOperator:[op characterAtIndex:0]];
             }
         }
