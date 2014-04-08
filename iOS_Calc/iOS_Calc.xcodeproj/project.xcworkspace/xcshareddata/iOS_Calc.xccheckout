@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>C5655F49-372F-48BB-BB53-F621BC0CA18B</string>
+	<key>IDESourceControlProjectName</key>
+	<string>iOS_Calc</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>D22D3369-8511-44F9-92C5-47A6139D9BC4</key>
+		<string>https://github.com/GWseo/GraphicsAssign1_Calc.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>iOS_Calc/iOS_Calc.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>D22D3369-8511-44F9-92C5-47A6139D9BC4</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/GWseo/GraphicsAssign1_Calc.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>D22D3369-8511-44F9-92C5-47A6139D9BC4</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>D22D3369-8511-44F9-92C5-47A6139D9BC4</string>
+			<key>IDESourceControlWCCName</key>
+			<string>iOS_calc_graphicsAssign-1</string>
+		</dict>
+	</array>
+</dict>
+</plist>
