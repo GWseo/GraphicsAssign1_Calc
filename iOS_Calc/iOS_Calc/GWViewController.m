@@ -37,11 +37,16 @@
 
 
 - (IBAction)StartCalculateBtn:(id)sender {
+    NSLog(@"StartCalculate\n");
     int result = [self.calc Calc:[self.DigitDisplay.text stringByAppendingString:@";"]];
-    NSLog(@"StartCalculateBtn\n");
+    NSLog(@"Done\n");
     self.DigitDisplay.text = [NSString stringWithFormat:@"%d",result];
+    
 }
 
+- (IBAction)ClearBtnClick:(UIButton *)sender {
+    self.DigitDisplay.text = @"0";
+}
 
 - (IBAction)NumberBtnClick:(UIButton *)sender {
     if( ![self.DigitDisplay.text compare: @"0"]) self.DigitDisplay.text = @"";

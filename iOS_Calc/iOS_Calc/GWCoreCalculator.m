@@ -32,16 +32,24 @@
     int result=0;
     _root=nil;
     NSLog(@"operation\n");
-    [self ParseOperation:operation];
-    //check bracket
-    
-    //make tree
-    [self makeTree];
-    //perform calculate
-    
-    result = [_root GetResult];
-    
-    NSLog(@"result : %d, root : %@\n",result, _root);
+    @autoreleasepool {
+        [self ParseOperation:operation];
+        //check bracket
+        if (![self checkBracket]) return -1;
+        
+        //make tree
+        [self makeTree];
+        
+        //perform calculate
+        result = [_root GetResult];
+        
+        NSLog(@"result : %d, root : %@\n",result, _root);
+        
+        //release datas
+        _root = nil;
+        _parseOperations =nil;
+        
+    }
     return result;
 }
 
@@ -52,8 +60,6 @@
     while (index<[operation length]) {
         switch ([operation characterAtIndex:index]){
                 case '(':
-                //[self pushNumber:integerValue];
-                //integerValue = 0;
                 [self pushOperation:@"("];
                 break;
                 
@@ -165,7 +171,6 @@
                 }
             }else if([op isEqualToString:@")"]){
                 [node setCloseBracket];
-                
                 while (YES) {
                     if([node checkOpenBracket]) break;
                     node =parent;
@@ -217,12 +222,8 @@
                             break;
                         }
                     }
-                    
                 }
-                
                 [node setOperator:[op characterAtIndex:0]];
-                
-                
             }
         }
         index++;
@@ -230,6 +231,26 @@
     _root = [self getRoot:node];
     NSLog(@"root done?? %@",node);
 }
+
+- (BOOL)checkBracket{
+    BOOL result = NO;
+    int index = 0;
+    int referenceCount=0;
+    while ([_parseOperations count] != index) {
+        if ([_parseOperations[index] isKindOfClass:[NSString class]]){
+            NSString* Bracket = [_parseOperations objectAtIndex:index];
+            if([Bracket isEqualToString:@"("]) referenceCount++;
+            else if([Bracket isEqualToString:@")"]) referenceCount--;
+            
+        }
+        index++;
+    }
+    if(referenceCount==0)   result=YES;
+    else                    result=NO;
+    
+    return result;
+}
+
 - (void)pushNumber:(int)integerValue{
     NSNumber* num = [NSNumber numberWithInt:integerValue];
     [[self parseOperations] addObject:num];
