@@ -23,6 +23,7 @@
     }
     return _parseOperations;
 }
+
 - (GWNumNode *) root{
     return _root;
 }
@@ -48,7 +49,6 @@
         //release datas
         _root = nil;
         _parseOperations =nil;
-        
     }
     return result;
 }
@@ -57,47 +57,55 @@
 {
     int index=0;
     int integerValue =0;
+    BOOL integerFlag = NO;
     while (index<[operation length]) {
         switch ([operation characterAtIndex:index]){
                 case '(':
                 [self pushOperation:@"("];
+                integerFlag=NO;
                 break;
                 
                 case ')':
-                if(integerValue)[self pushNumber:integerValue];
+                if(integerFlag)[self pushNumber:integerValue];
                 integerValue = 0;
                 [self pushOperation:@")"];
+                integerFlag=NO;
                 break;
                 
                 case '*':
-                if(integerValue)[self pushNumber:integerValue];
+                if(integerFlag)[self pushNumber:integerValue];
                 integerValue = 0;
                 [self pushOperation:@"*"];
+                integerFlag=NO;
                 break;
                 
                 case '/':
-                if(integerValue)[self pushNumber:integerValue];
+                if(integerFlag)[self pushNumber:integerValue];
                 integerValue = 0;
                 [self pushOperation:@"/"];
+                integerFlag=NO;
                 break;
                 
                 case '+':
-                if(integerValue)[self pushNumber:integerValue];
+                if(integerFlag)[self pushNumber:integerValue];
                 integerValue = 0;
                 [self pushOperation:@"+"];
+                integerFlag=NO;
                 break;
                 
                 case '-':
-                if(integerValue)[self pushNumber:integerValue];
+                if(integerFlag)[self pushNumber:integerValue];
                 integerValue = 0;
                 [self pushOperation:@"-"];
+                integerFlag=NO;
                 break;
                 
                 case ';':
-                if(integerValue)[self pushNumber:integerValue];
+                if(integerFlag)[self pushNumber:integerValue];
                 integerValue = 0;
                 [self pushOperation:@"+"];
                 [self pushNumber:0];
+                integerFlag=NO;
                 break;
                 
                 case '1':
@@ -110,6 +118,7 @@
                 case '8':
                 case '9':
                 case '0':
+                integerFlag = YES;
                 integerValue*=10;
                 integerValue+=[operation characterAtIndex:index]-'0';
                 break;
@@ -149,7 +158,6 @@
                     node = [[GWNumNode alloc]initWithValue:[num intValue] :node];
                     [parent setRPointer:node];
                 }
-               
             }else{
                 node = [[GWNumNode alloc] initWithValue:[num intValue]: parent];
             }
@@ -192,12 +200,15 @@
                 temp = node;
                 
                 if (([op characterAtIndex:0] == '-') || ([op characterAtIndex:0]=='+') ){
+                    int bracketReferenceCount =0;
                     while (YES) {
                         if ([parent checkOpenBracket]){
-                            break;
+                            bracketReferenceCount-=[parent getOpenBracketCount];
+                            if(bracketReferenceCount<=0)break;
                         }
                         if ([node checkCloseBracket]) {
-                            while ([node checkOpenBracket]) {
+                            bracketReferenceCount+=[node getCloseBracketCount];
+                            while (bracketReferenceCount<=0) {
                                 node = parent;
                                 parent = [node getParent];
                             }
@@ -241,13 +252,11 @@
             NSString* Bracket = [_parseOperations objectAtIndex:index];
             if([Bracket isEqualToString:@"("]) referenceCount++;
             else if([Bracket isEqualToString:@")"]) referenceCount--;
-            
         }
         index++;
     }
     if(referenceCount==0)   result=YES;
     else                    result=NO;
-    
     return result;
 }
 

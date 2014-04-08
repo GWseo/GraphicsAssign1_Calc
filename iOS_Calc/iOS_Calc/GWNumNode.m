@@ -200,19 +200,26 @@
 }
 
 - (void)setOpenBracket{
-    if(!BO)BO=YES;
-    else BO=NO;
+    BO++;
 }
 
 - (void)setCloseBracket{
-    if(!BC) BC=YES;
-    else BC = NO;
+    BC++;
 }
-- (BOOL)checkOpenBracket{
+- (int)getCloseBracketCount{
+    return BC;
+}
+
+- (int)getOpenBracketCount{
     return BO;
 }
+- (BOOL)checkOpenBracket{
+    if (BO) return YES;
+    else return NO;
+}
 - (BOOL)checkCloseBracket{
-    return BC;
+    if (BC) return YES;
+    else return NO;
 }
 
 // getters
