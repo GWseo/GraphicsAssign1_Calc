@@ -133,14 +133,13 @@
                 //parent = node;
                 if([node isLeftEmpty] ){
                     //[parent setLPointer:node];
-                    parent = node;
+                    parent = [node getParent];
 
                     [node setLValue:[num intValue]];
                 }
                 else{
-                    parent = node;
                     
-             
+                    parent = node;
                     node = [[GWNumNode alloc]initWithValue:[num intValue] :node];
                     [parent setRPointer:node];
                 }
@@ -155,18 +154,20 @@
             if ([op isEqualToString:@"("]) {
                 if( !node ){
                     node = [[GWNumNode alloc]initWithValue:0 :node];
-                    [node setBracket];
+                    [node setOpenBracket];
                     
                 }else{
-                    [node setBracket];
+                    [node setOpenBracket];
                     parent = node;
                     node = [[GWNumNode alloc]initWithValue:0 :parent];
                     if ([parent isLeftEmpty]) [parent setLPointer:node];
                     else [parent setRPointer:node];
                 }
             }else if([op isEqualToString:@")"]){
+                [node setCloseBracket];
+                
                 while (YES) {
-                    if([node checkBracket]) break;
+                    if([node checkOpenBracket]) break;
                     node =parent;
                     parent = [node getParent];
                 }
@@ -180,7 +181,48 @@
             }
             else{
                 //operation priority
+                
+                //Backup
+                GWNumNode *temp, *new;
+                temp = node;
+                
+                if (([op characterAtIndex:0] == '-') || ([op characterAtIndex:0]=='+') ){
+                    while (YES) {
+                        if ([parent checkOpenBracket]){
+                            break;
+                        }
+                        if ([node checkCloseBracket]) {
+                            while ([node checkOpenBracket]) {
+                                node = parent;
+                                parent = [node getParent];
+                            }
+                        }
+                        if (([parent getOperation]== '*') || ([parent getOperation] =='/')){
+                            node = parent;
+                            parent = [node getParent];
+                        }else{
+                            //insert node
+                            if (!parent) {
+                                node = temp;
+                                parent = [node getParent];
+                                break;
+                            }
+                            new = [[GWNumNode alloc]init];
+                            [new setLPointer:node];
+                            [new setParent:parent];
+                            [parent setRPointer:new];
+                            
+                            node = new;
+                            
+                            break;
+                        }
+                    }
+                    
+                }
+                
                 [node setOperator:[op characterAtIndex:0]];
+                
+                
             }
         }
         index++;

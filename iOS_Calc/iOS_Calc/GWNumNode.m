@@ -14,7 +14,8 @@
         parentNode = parent;
         lValue = V;
         ty = Leaf;
-        B = NO;
+        BO = NO;
+        BC = NO;
     }
     
     return self;
@@ -26,13 +27,13 @@
         else rightNode =Child;
         ty = Node;
         op = None;
-        B = NO;
+        BO = NO;
+        BC = NO;
     }
     return self;
 }
 - (void)setRValue:(int)Value{
     rValue = Value;
-    
     [self checkNil];
 }
 
@@ -50,6 +51,11 @@
     leftNode = Left;
     [self checkNil];
 }
+
+- (void)setParent:(GWNumNode *)Pparent{
+    parentNode = Pparent;
+}
+
 - (void)setOperator:(char)oper{
     switch (oper) {
         case '+':
@@ -181,12 +187,41 @@
     else return YES;
 }
 
-- (void)setBracket{
-    if(!B)B=YES;
-    else B=NO;
+- (void)setOpenBracket{
+    if(!BO)BO=YES;
+    else BO=NO;
 }
-- (BOOL)checkBracket{
-    return B;
+
+- (void)setCloseBracket{
+    if(!BC) BC=YES;
+    else BC = NO;
+}
+- (BOOL)checkOpenBracket{
+    return BO;
+}
+- (BOOL)checkCloseBracket{
+    return BC;
+}
+
+- (char)getOperation{
+    char oper;
+    switch (op) {
+        case Add:
+            oper='+';
+            break;
+        case Sub:
+            oper='-';
+            break;
+        case Mul:
+            oper='*';
+            break;
+        case Div:
+            oper='/';
+            break;
+        default:
+            break;
+    }
+    return oper;
 }
 - (GWNumNode*)getParent{
     return parentNode;

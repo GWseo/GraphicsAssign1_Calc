@@ -20,7 +20,8 @@ typedef enum { OpenBracket,CloseBracket} Bracket;
     GWNumNode * parentNode;
     OP op;
     TYPE ty;
-    BOOL B;
+    BOOL BO;
+    BOOL BC;
     int lValue;
     int rValue;
 }
@@ -31,10 +32,15 @@ typedef enum { OpenBracket,CloseBracket} Bracket;
 -(void)setRPointer:(GWNumNode *)Right;
 -(void)setLPointer:(GWNumNode *)Left;
 -(void)setOperator:(char)op;
+-(void)setParent:(GWNumNode*)Pparent;
 -(int)GetResult;
+
 -(BOOL)isChildFull;
 -(BOOL)isLeftEmpty;
--(void)setBracket;
--(BOOL)checkBracket;
+-(void)setOpenBracket;
+-(void)setCloseBracket;
+-(BOOL)checkOpenBracket;
+-(BOOL)checkCloseBracket;
+-(char)getOperation;
 -(GWNumNode *)getParent;
 @end
