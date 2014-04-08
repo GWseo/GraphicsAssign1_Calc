@@ -73,13 +73,13 @@
 
 
 - (void)checkNil{
-    if ( !(leftNode && rightNode)) ty = Leaf;
-    else ty = Node;
+    if ( (leftNode || rightNode)) ty = Node;
+    else ty = Leaf;
 }
 
 - (int)GetResult{
     int result=0;
-    if ( ty != Node){
+    if ( ty == Node){
         switch (op){
             case Add:
                 result = [self addOperation];

@@ -132,17 +132,19 @@
             if(node){
                 //parent = node;
                 if([node isLeftEmpty] ){
+                    //[parent setLPointer:node];
+                    parent = node;
+
                     [node setLValue:[num intValue]];
                 }
                 else{
-                    node = [[GWNumNode alloc]initWithValue:[num intValue] :node];
-                }
-                if( [parent isLeftEmpty]){
-                    [parent setLPointer:node];
-                }else{
-                    [parent setRPointer:node];
+                    parent = node;
                     
+             
+                    node = [[GWNumNode alloc]initWithValue:[num intValue] :node];
+                    [parent setRPointer:node];
                 }
+               
             }else{
                 node = [[GWNumNode alloc] initWithValue:[num intValue]: parent];
             }
@@ -203,7 +205,6 @@
         root= parent;
         parent = [parent getParent];
         NSLog(@"get root : %@",root);
-        
     }
     return root;
 }
