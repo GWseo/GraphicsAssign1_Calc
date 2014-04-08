@@ -10,8 +10,12 @@
 #import "GWNumNode.h"
 
 @interface GWCoreCalculator : NSObject
-
+/*
+ Get operations as String
+ */
 - (int) Calc:(NSString *)operation;
+/*
+ Parse Operations and insert at Array
+*/
 - (NSArray*)ParseOperation:(NSString*)operation;
-- (void)pushNumber:(int)integerValue;
 @end

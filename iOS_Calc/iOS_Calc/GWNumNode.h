@@ -25,22 +25,30 @@ typedef enum { OpenBracket,CloseBracket} Bracket;
     int lValue;
     int rValue;
 }
+//initializers
 -(id)initWithValue:(int)V:(GWNumNode *)parent;
 -(id)initWithPointer:(GWNumNode *)Child;
+//setters
 -(void)setRValue:(int)Value;
 -(void)setLValue:(int)Value;
 -(void)setRPointer:(GWNumNode *)Right;
 -(void)setLPointer:(GWNumNode *)Left;
 -(void)setOperator:(char)op;
 -(void)setParent:(GWNumNode*)Pparent;
+
+//calculate own result
 -(int)GetResult;
 
+//check state
 -(BOOL)isChildFull;
 -(BOOL)isLeftEmpty;
+//setter cont`
 -(void)setOpenBracket;
 -(void)setCloseBracket;
 -(BOOL)checkOpenBracket;
 -(BOOL)checkCloseBracket;
+
+//getters
 -(char)getOperation;
 -(GWNumNode *)getParent;
 @end

@@ -9,6 +9,9 @@
 #import "GWNumNode.h"
 @implementation GWNumNode
 
+/*
+ initialization with left Value, and get ParentNode
+ */
 - (id)initWithValue:(int)V :(GWNumNode*)parent{
     if ( self = [super init]){
         parentNode = parent;
@@ -17,10 +20,11 @@
         BO = NO;
         BC = NO;
     }
-    
     return self;
 }
-
+/*
+ initialization with Child Node
+ */
 - (id)initWithPointer:(GWNumNode *)Child{
     if ( self = [super init]){
         if(!leftNode)leftNode = Child;
@@ -32,6 +36,8 @@
     }
     return self;
 }
+
+// Setters
 - (void)setRValue:(int)Value{
     rValue = Value;
     [self checkNil];
@@ -77,12 +83,17 @@
     }
 }
 
-
+/*
+ Check Node is leaf or not
+ */
 - (void)checkNil{
     if ( (leftNode || rightNode)) ty = Node;
     else ty = Leaf;
 }
 
+/*
+ Calulate result with rValue & lValue (Recursive)
+ */
 - (int)GetResult{
     int result=0;
     if ( ty == Node){
@@ -116,7 +127,7 @@
     
     return result;
 }
-
+// Operations
 - (int)addOperation{
     if (leftNode){
         lValue = [leftNode GetResult];
@@ -177,6 +188,7 @@
     return result;
 }
 
+// Check States
 - (BOOL)isChildFull{
     if (rightNode && leftNode) return YES;
     else return NO;
@@ -203,6 +215,7 @@
     return BC;
 }
 
+// getters
 - (char)getOperation{
     char oper;
     switch (op) {
