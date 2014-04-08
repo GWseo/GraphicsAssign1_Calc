@@ -172,10 +172,10 @@
                     
                 }else{
                     [node setOpenBracket];
-                    parent = node;
-                    node = [[GWNumNode alloc]initWithValue:0 :parent];
-                    if ([parent isLeftEmpty]) [parent setLPointer:node];
-                    else [parent setRPointer:node];
+                    //parent = node;
+                    //node = [[GWNumNode alloc]initWithValue:0 :parent];
+                    //if ([parent isLeftEmpty]) [parent setLPointer:node];
+                    //else [parent setRPointer:node];
                 }
             }else if([op isEqualToString:@")"]){
                 [node setCloseBracket];
@@ -184,11 +184,11 @@
                     node =parent;
                     parent = [node getParent];
                 }
-                if (!parent) {
-                    parent = [[GWNumNode alloc]initWithPointer:node];
-                }
-                node = parent;
-                parent = [node getParent];
+                //if (!parent) {
+                //    parent = [[GWNumNode alloc]initWithPointer:node];
+                //}
+                //node = parent;
+                //parent = [node getParent];
                 
                 
             }
@@ -219,9 +219,9 @@
                         }else{
                             //insert node
                             if (!parent) {
-                                node = temp;
-                                parent = [node getParent];
-                                break;
+                             //   node = temp;
+                             //   parent = [node getParent];
+                             //   break;
                             }
                             new = [[GWNumNode alloc]init];
                             [new setLPointer:node];
