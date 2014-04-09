@@ -93,18 +93,6 @@
     BOOL integerFlag = NO;
     while (index<[operation length]) {
         switch ([operation characterAtIndex:index]){
-                case '(':
-                [self pushOperation:@"("];
-                integerFlag=NO;
-                break;
-                
-                case ')':
-                if(integerFlag)[self pushNumber:integerValue];
-                integerValue = 0;
-                [self pushOperation:@")"];
-                integerFlag=NO;
-                break;
-                
                 case '*':
                 if(integerFlag)[self pushNumber:integerValue];
                 integerValue = 0;
@@ -171,6 +159,7 @@
     GWNumNode *node=nil;
     GWNumNode *parent = nil;
     int index = 0;
+    int isNegative = 1;
     NSLog(@"make tree, %d\n",[_parseOperations count]);
     while (index != [_parseOperations count] ){
         if([_parseOperations[index] isKindOfClass:[NSNumber class ]]){
@@ -183,114 +172,74 @@
                     //[parent setLPointer:node];
                     parent = [node getParent];
                     
-                    [node setLValue:[num intValue]];
+                    [node setLValue:[num intValue]*isNegative];
                 }
                 else{
                     GWNumNode *temp;
                     parent = node;
-                    node = [[GWNumNode alloc]initWithValue:[num intValue] :node];
+                    node = [[GWNumNode alloc]initWithValue:[num intValue]*isNegative :node];
                     temp = [parent getRNode];
                     [parent setRPointer:node];
                     [node setRPointer:temp];
                 }
             }else{
-                node = [[GWNumNode alloc] initWithValue:[num intValue]: parent];
+                node = [[GWNumNode alloc] initWithValue:[num intValue]*isNegative: parent];
             }
         }
         else{
             NSString* op = [_parseOperations objectAtIndex:index];
-            NSLog(@"is this not : %@\n",op);
-            if ([op isEqualToString:@"("]) {
-                if( !node ){
-                    node = [[GWNumNode alloc]initWithValue:0 :node];
-                    [node setOpenBracket];
-                    
-                }else{
-                    [node setOpenBracket];
-                    //parent = node;
-                    //node = [[GWNumNode alloc]initWithValue:0 :parent];
-                    //if ([parent isLeftEmpty]) [parent setLPointer:node];
-                    //else [parent setRPointer:node];
+            if ([op isEqualToString:@"-"]) {
+                //if front char is operation then it is negative number
+                NSString* cmpElement = @"+";
+                if(index > 0)cmpElement = [_parseOperations objectAtIndex:(index-1)];
+                if ([cmpElement compare:@"+"] || [cmpElement compare:@"-"]
+                    || [cmpElement compare:@"*"] || [cmpElement compare:@"/"]){
+                    isNegative = -1;
+                    index ++;
+                    continue;
                 }
-            }else if([op isEqualToString:@")"]){
-                [node setCloseBracket];
-                int BracketReferenceCount = 0;
-                while (YES) {
-                    if([node checkOpenBracket]) {
-                        if (BracketReferenceCount)  BracketReferenceCount-=[node getOpenBracketCount];
-                        else break;
-                    }
-                    node =parent;
-                    parent = [node getParent];
-                    if ([parent checkCloseBracket]) BracketReferenceCount+= [node getCloseBracketCount];
-                }
-                //if (!parent) {
-                //    parent = [[GWNumNode alloc]initWithPointer:node];
-                //}
-                //node = parent;
-                //parent = [node getParent];
-                
-                
             }
             else{
-                //operation priority
+                isNegative = 1;
+            }
+            NSLog(@"is this not : %@\n",op);
+            //operation priority
+         
+            //Backup
+            GWNumNode *temp, *new;
+            temp = node;
+            
+            if (([op characterAtIndex:0] == '-') || ([op characterAtIndex:0]=='+') ){
+                while (YES) {
                 
-                //Backup
-                GWNumNode *temp, *new;
-                temp = node;
-                
-                if (([op characterAtIndex:0] == '-') || ([op characterAtIndex:0]=='+') ){
-                    int bracketReferenceCount =0;
-                    while (YES) {
-                        if ([parent checkOpenBracket]){
-                            bracketReferenceCount-=[parent getOpenBracketCount];
-                            if(bracketReferenceCount<=0)break;
-                        }
-                        if ([node checkCloseBracket]) {
-                            bracketReferenceCount+=[node getCloseBracketCount];
-                            while (bracketReferenceCount<=0) {
-                                node = parent;
-                                parent = [node getParent];
-                            }
-                        }
-                        if (([parent getOperation]== '*') || ([parent getOperation] =='/')){
-                            node = parent;
-                            parent = [node getParent];
-                        }else{
-                            //insert node
-                            /*
-                            if (!parent) {
-                                //node = temp;
-                                parent = [node getParent];
-                                
-                                break;
-                            //}else{
-                            */
-                             new = [[GWNumNode alloc]initWithPointer:node];
-                                [new setParent:parent];
-                                if([parent isLeftEmpty])[parent setLPointer:new];
-                                else [parent setRPointer:new];
-                            //}
-                            node = new;
-                            
-                            break;
-                        }
-                    }
-                }else if (([op characterAtIndex:0] == '*') || ([op characterAtIndex:0]=='/') ){
-                    if ([node getOperation] != None){
-                        new = [[GWNumNode alloc]initWithValue:0 :node];
-                        if ([node isLeftEmpty]) {
-                            [new setLPointer:[node getLNode]];
-                            [node setLPointer:new];
-                        }else{
-                            [new setLPointer:[node getRNode]];
-                            [node setRPointer:new];
-                        }
+                    if (([parent getOperation]== '*') || ([parent getOperation] =='/')){
+                        node = parent;
+                        parent = [node getParent];
+                    }else{
+                        new = [[GWNumNode alloc]initWithPointer:node];
+                        [new setParent:parent];
+                        if([parent isLeftEmpty])[parent setLPointer:new];
+                        else [parent setRPointer:new];
+                        
                         node = new;
+                        
+                        break;
                     }
                 }
-                [node setOperator:[op characterAtIndex:0]];
+            }else if (([op characterAtIndex:0] == '*') || ([op characterAtIndex:0]=='/') ){
+                if ([node getOperation] != None){
+                    new = [[GWNumNode alloc]initWithValue:0 :node];
+                    if ([node isLeftEmpty]) {
+                        [new setLPointer:[node getLNode]];
+                        [node setLPointer:new];
+                    }else{
+                        [new setLPointer:[node getRNode]];
+                        [node setRPointer:new];
+                    }
+                    node = new;
+                }
             }
+            [node setOperator:[op characterAtIndex:0]];
         }
         index++;
     }
