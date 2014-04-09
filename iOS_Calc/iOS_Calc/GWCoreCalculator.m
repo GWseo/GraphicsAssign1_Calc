@@ -32,10 +32,63 @@
 {
     int result=0;
     _root=nil;
+    @autoreleasepool {
+        NSLog(@"operation\n");
+        @try {
+            [self CheckOperationCorrect:operation];
+            operation = [self ProcessBracket:operation];
+            //group out the bracket
+            [self ParseOperation:operation];
+        
+            //check bracket
+            if (![self checkBracket])
+                [NSException raise:@"ERROR" format:@"Bracket Error\n"];
+        
+            //make tree
+            [self makeTree];
+        
+            //perform calculate
+            result = [_root GetResult];
+        }
+        @catch (NSException *exception) {
+            NSLog(@"ERROR !!!");
+            _root = nil;
+            _parseOperations =nil;
+            [NSException raise:@"ERROR" format:[exception reason]];
+        }
+        @finally {
+            
+        }
+        NSLog(@"result : %d, root : %@\n",result, _root);
+        
+        //release datas
+        _root = nil;
+        _parseOperations =nil;
+    }
+    return result;
+}
+
+- (void)CheckOperationCorrect:(NSString *)operation{
+    
+    int index = 0 ;
+    NSLog(@"check operation Correct : %@, %d",operation,[operation length]);
+    while ([operation length] != index+1) {
+        char element = [operation characterAtIndex:index];
+        char nextElement = [operation characterAtIndex:index+1];
+        NSLog(@"%c, %c checking...\n",element, nextElement );
+        if ( element < 0x30 && element > 0x29) {
+            if (nextElement<0x30 && nextElement > 0x29 && nextElement!=0x2D){
+                NSLog(@"wrong...!");
+                [NSException raise:@"Operation Expression error" format:@"Expression isn't complete or illegal\n"];
+            }
+        }
+        index ++;
+    }
+    
+}
+//process bracket as groupping with recursive
+- (NSString*)ProcessBracket:(NSString*)operation{
     int index=0, subIndex=0;
-    
-    NSLog(@"operation\n");
-    
     while ([operation length]!=index){
         if ([[operation substringWithRange:NSMakeRange(index, 1)] isEqualToString:@"(" ]) {
             subIndex=index+1;
@@ -65,26 +118,9 @@
         }
         index ++;
     }
-    @autoreleasepool {
-        [self ParseOperation:operation];
-        //check bracket
-        if (![self checkBracket]) return -1;
-        
-        //make tree
-        [self makeTree];
-        
-        //perform calculate
-        result = [_root GetResult];
-        
-        NSLog(@"result : %d, root : %@\n",result, _root);
-        
-        //release datas
-        _root = nil;
-        _parseOperations =nil;
-    }
-    return result;
-}
+    return operation;
 
+}
 
 - (NSMutableArray *)ParseOperation:(NSString *)operation
 {
@@ -171,7 +207,6 @@
                 if([node isLeftEmpty] ){
                     //[parent setLPointer:node];
                     parent = [node getParent];
-                    
                     [node setLValue:[num intValue]*isNegative];
                 }
                 else{
@@ -189,15 +224,12 @@
         else{
             NSString* op = [_parseOperations objectAtIndex:index];
             if ([op isEqualToString:@"-"]) {
-                //if front char is operation then it is negative number
-                NSString* cmpElement = @"+";
-                if(index > 0)cmpElement = [_parseOperations objectAtIndex:(index-1)];
-                if ([cmpElement compare:@"+"] || [cmpElement compare:@"-"]
-                    || [cmpElement compare:@"*"] || [cmpElement compare:@"/"]){
-                    isNegative = -1;
+                isNegative *= -1;
+                if(isNegative==-1){
                     index ++;
                     continue;
                 }
+                else op = @"+";
             }
             else{
                 isNegative = 1;
@@ -220,9 +252,7 @@
                         [new setParent:parent];
                         if([parent isLeftEmpty])[parent setLPointer:new];
                         else [parent setRPointer:new];
-                        
                         node = new;
-                        
                         break;
                     }
                 }

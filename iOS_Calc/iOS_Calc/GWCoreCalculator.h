@@ -14,8 +14,5 @@
  Get operations as String
  */
 - (int) Calc:(NSString *)operation;
-/*
- Parse Operations and insert at Array
-*/
-- (NSArray*)ParseOperation:(NSString*)operation;
+
 @end

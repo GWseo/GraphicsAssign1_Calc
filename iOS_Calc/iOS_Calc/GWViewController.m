@@ -38,10 +38,19 @@
 
 - (IBAction)StartCalculateBtn:(id)sender {
     NSLog(@"StartCalculate\n");
-    int result = [self.calc Calc:[self.DigitDisplay.text stringByAppendingString:@";"]];
+    int result = 0;
+    @try {
+        result = [self.calc Calc:[self.DigitDisplay.text stringByAppendingString:@";"]];
+        self.DigitDisplay.text = [NSString stringWithFormat:@"%d",result];
+    }
+    @catch (NSException *exception) {
+        NSLog([exception reason]);
+        self.DigitDisplay.text = @"ERROR!!!!! PUSH CLEAR";
+    }
+    @finally {
+        
+    }
     NSLog(@"Done\n");
-    self.DigitDisplay.text = [NSString stringWithFormat:@"%d",result];
-    
 }
 
 - (IBAction)ClearBtnClick:(UIButton *)sender {
