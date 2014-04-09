@@ -75,11 +75,22 @@
     while ([operation length] != index+1) {
         char element = [operation characterAtIndex:index];
         char nextElement = [operation characterAtIndex:index+1];
-        //NSLog(@"%c, %c checking...\n",element, nextElement );
+        NSLog(@"%c, %c checking...\n",element, nextElement );
         if ( element < 0x30 && element > 0x29) {
             if (nextElement<0x30 && nextElement > 0x29 && nextElement!=0x2D){
                 NSLog(@"wrong...!");
                 [NSException raise:@"Operation Expression error" format:@"Expression isn't complete or illegal\n"];
+            }
+        }
+        if (nextElement == 0x28 ){
+            if (element>0x30){
+                NSLog(@"Unexpected Expression Bracket");
+                [NSException raise:@"Bracket Error" format:@"write operation before bracket!"];
+            }
+        }if (element == 0x29){
+            if (nextElement >0x30 && nextElement<0x3A){
+                NSLog(@"worng expression )+num");
+                [NSException raise:@"bracket error )#" format:@"cloase bracket need operator"];
             }
         }
         index ++;
