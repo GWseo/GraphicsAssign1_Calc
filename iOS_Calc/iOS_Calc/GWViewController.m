@@ -56,6 +56,12 @@
 - (IBAction)ClearBtnClick:(UIButton *)sender {
     self.DigitDisplay.text = @"0";
 }
+- (IBAction)EraseBtn:(id)sender {
+    self.DigitDisplay.text = [self.DigitDisplay.text substringWithRange:NSMakeRange(0, [self.DigitDisplay.text length]-1)];
+    if ([self.DigitDisplay.text isEqualToString:@""]) {
+        self.DigitDisplay.text = @"0";
+    }
+}
 
 - (IBAction)NumberBtnClick:(UIButton *)sender {
     if( ![self.DigitDisplay.text compare: @"0"]) self.DigitDisplay.text = @"";

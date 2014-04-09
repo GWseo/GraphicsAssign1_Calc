@@ -75,7 +75,7 @@
     while ([operation length] != index+1) {
         char element = [operation characterAtIndex:index];
         char nextElement = [operation characterAtIndex:index+1];
-        NSLog(@"%c, %c checking...\n",element, nextElement );
+        //NSLog(@"%c, %c checking...\n",element, nextElement );
         if ( element < 0x30 && element > 0x29) {
             if (nextElement<0x30 && nextElement > 0x29 && nextElement!=0x2D){
                 NSLog(@"wrong...!");
