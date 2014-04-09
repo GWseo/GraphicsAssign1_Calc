@@ -224,7 +224,7 @@
 
 // getters
 - (char)getOperation{
-    char oper;
+    char oper=None;
     switch (op) {
         case Add:
             oper='+';
@@ -246,4 +246,11 @@
 - (GWNumNode*)getParent{
     return parentNode;
 }
+- (GWNumNode*)getLNode{
+    return leftNode;
+}
+- (GWNumNode*)getRNode{
+    return rightNode;
+}
+
 @end

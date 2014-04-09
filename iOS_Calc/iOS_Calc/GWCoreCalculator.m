@@ -32,7 +32,39 @@
 {
     int result=0;
     _root=nil;
+    int index=0, subIndex=0;
+    
     NSLog(@"operation\n");
+    
+    while ([operation length]!=index){
+        if ([[operation substringWithRange:NSMakeRange(index, 1)] isEqualToString:@"(" ]) {
+            subIndex=index+1;
+            int depth = 0;
+            while (YES){
+                if([[operation substringWithRange:NSMakeRange(subIndex, 1)] isEqualToString:@")" ] ){
+                    if (depth) {
+                        depth--;
+                        subIndex++;
+                        continue;
+                    }
+                    else {
+                        NSString* ReplaceOperation =[operation substringWithRange:NSMakeRange(index+1, subIndex-index-1)];
+                        NSString *tempOperation = [NSString stringWithFormat:@"%@+0",ReplaceOperation];
+                        
+                        int tempResult = [self Calc:tempOperation];
+                        NSLog(@"temp result : %d\n",tempResult);
+                        operation = [operation stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"(%@)",ReplaceOperation] withString:[NSString stringWithFormat:@"%d",tempResult] options:NSCaseInsensitiveSearch range:NSMakeRange(0, [operation length]) ];
+                        break;
+                    }
+                }
+                else if([[operation substringWithRange:NSMakeRange(subIndex, 1)] isEqualToString:@"(" ] ){
+                    depth ++;
+                }
+                subIndex++;
+            }
+        }
+        index ++;
+    }
     @autoreleasepool {
         [self ParseOperation:operation];
         //check bracket
@@ -52,6 +84,7 @@
     }
     return result;
 }
+
 
 - (NSMutableArray *)ParseOperation:(NSString *)operation
 {
@@ -149,14 +182,16 @@
                 if([node isLeftEmpty] ){
                     //[parent setLPointer:node];
                     parent = [node getParent];
-
+                    
                     [node setLValue:[num intValue]];
                 }
                 else{
-                    
+                    GWNumNode *temp;
                     parent = node;
                     node = [[GWNumNode alloc]initWithValue:[num intValue] :node];
+                    temp = [parent getRNode];
                     [parent setRPointer:node];
+                    [node setRPointer:temp];
                 }
             }else{
                 node = [[GWNumNode alloc] initWithValue:[num intValue]: parent];
@@ -179,10 +214,15 @@
                 }
             }else if([op isEqualToString:@")"]){
                 [node setCloseBracket];
+                int BracketReferenceCount = 0;
                 while (YES) {
-                    if([node checkOpenBracket]) break;
+                    if([node checkOpenBracket]) {
+                        if (BracketReferenceCount)  BracketReferenceCount-=[node getOpenBracketCount];
+                        else break;
+                    }
                     node =parent;
                     parent = [node getParent];
+                    if ([parent checkCloseBracket]) BracketReferenceCount+= [node getCloseBracketCount];
                 }
                 //if (!parent) {
                 //    parent = [[GWNumNode alloc]initWithPointer:node];
@@ -235,6 +275,18 @@
                             
                             break;
                         }
+                    }
+                }else if (([op characterAtIndex:0] == '*') || ([op characterAtIndex:0]=='/') ){
+                    if ([node getOperation] != None){
+                        new = [[GWNumNode alloc]initWithValue:0 :node];
+                        if ([node isLeftEmpty]) {
+                            [new setLPointer:[node getLNode]];
+                            [node setLPointer:new];
+                        }else{
+                            [new setLPointer:[node getRNode]];
+                            [node setRPointer:new];
+                        }
+                        node = new;
                     }
                 }
                 [node setOperator:[op characterAtIndex:0]];

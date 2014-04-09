@@ -52,4 +52,6 @@ typedef enum { OpenBracket,CloseBracket} Bracket;
 -(GWNumNode *)getParent;
 -(int)getOpenBracketCount;
 -(int)getCloseBracketCount;
+-(GWNumNode *)getLNode;
+-(GWNumNode *)getRNode;
 @end
